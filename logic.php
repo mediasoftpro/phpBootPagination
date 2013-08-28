@@ -1,14 +1,7 @@
 <?php
 // This class handles different levels of pagination across website (both ajax and normal)
 class pagination {
-	
-	// add pagination to normal sql query
-	function add_limit($pagenumber, $pagesize)
-	{
-		$startindex = ($pagenumber - 1) * $pagesize;
-		return " limit " . $startindex . "," . $pagesize;
-	}
-    
+	    
 	// prepare ajax pagination script
 	function ajax_pagination_v2($total_records, $pagesize, $selectedpage)
 	{
