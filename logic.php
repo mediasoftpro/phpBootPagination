@@ -2,35 +2,48 @@
 // This class handles different levels of pagination across website (both ajax and normal)
 class pagination {
 	    
-	// prepare ajax pagination script
-	function ajax_pagination_v2($total_records, $pagesize, $selectedpage)
-	{
-		$script = "";
-		$totalpages = ceil($total_records/$pagesize);
-		if ($totalpages < 1)
-		  return "";
-		 
-		$arr = pagination::simple_pagination_links($totalpages,7,$selectedpage);
-		$totallinks = count($arr);
-		if($totallinks > 1)
-		{
-			$script ."<div class=\"pagination pagination-mini\"><ul>\n";
-			$i = 0;
-			$css = "";
-			for($i == 0; $i <= $totallinks - 1; $i++)
-			{
-				if($arr[i] == $selectedpage)
-				  $css = " class=\"active\"";
-				else
-				  $css = "";
-			    $script .= "<li" . $css . "><a href=\"#\" $id=\"apg_" . $arr[$i] . "\" class=\"apagination-css\">" . $arr[$i] . "</a></li>";
-			}
-			$script .="</ul></div>\n";
-		}
-		return $script;
-		
-	}
-
+	// Main Pagination Logic
+    function simple_pagination_links($totalpages,$totallinks,$selectedpage) 
+     {
+         $i = 0;
+         $arr = array();
+         if ($totalpages < $totallinks)
+         {
+             for( $i=1; $i<=$totalpages; $i++)
+             {
+                 $arr[] = $i;
+             }
+         }
+         else
+         {
+            $startindex  = $selectedpage;
+            $lowerbound = $startindex - floor($totallinks / 2);
+            $upperbound = $startindex + floor($totallinks / 2);
+             if ($lowerbound < 1)
+             {
+                 //calculate the difference and increment the upper bound
+                $upperbound = $upperbound + (1 - $lowerbound);
+                $lowerbound = 1;
+             }
+             //if upperbound is greater than total page is
+             if ($upperbound > $totalpages)
+             {
+                //calculate the difference and decrement the lower bound
+                $lowerbound = $lowerbound - ($upperbound - $totalpages);
+                $upperbound = $totalpages;
+             }
+             for($i=$lowerbound;$i<=$upperbound;$i++)
+             {
+                 $arr[] = $i;
+             }
+           
+           
+         }
+        return $arr;
+       
+     }
+	 
+	 // Advance pagination logic
     function advance_pagination_links($totalpages, $selectedpage)
     {
         $i = 0;
