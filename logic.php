@@ -53,6 +53,7 @@ class pagination {
         $upper_arr = array();
         
 		$indexer = array("4","40","50","400","500","4000","5000","40000","50000");
+		$patter = array("1", "1", "1", "4", "40", "50", "400", "500", "4000", "5000", "40000");
         if ($selectedpage == 1)
         {
 			// 15 links
@@ -68,37 +69,31 @@ class pagination {
 				  $arr[] = $value;
 			}
         }
-		$j = 0;
+		
         if ($selectedpage > 1)
-        {
-			for ($i = 1; $i <= 8; $i++)
-            {				
-				if($i <= 4)
-				  $value = $selectedpage - $i;
+        {   
+			for ($i = 0; $i <= 7; $i++)
+            {	
+			    if($value == 0)
+				   $value = $selectedpage - $patter[$i];			
 				else
-				{
-				  $value = $value - $indexer[$i-8+(1+$j)];
-				  $j++;
-				}
-				if($value > 0 && !in_array($value,$lower_arr))
-				  $lower_arr[] = $value;
+				   $value = $value - $patter[$i];
+				
+				if($value > 0)
+				   $lower_arr[] = $value;
             }
-            //// display upper bound
-			$j = 0;
-            $diff = $totalpages - $selectedpage;
-			for ($i = 1; $i <= 8; $i++)
+            $value = 0;
+			for ($i = 0; $i <= 7; $i++)
 			{
-				if($i <= 4)
-				  $value = $selectedpage + $i;
+				if($value == 0)
+				   $value = $selectedpage + $patter[$i];			
 				else
-				{
-					$value = $value + $indexer[$i-5];
-					$j++;
-				}
+				   $value = $value + $patter[$i];
+				
 				if($value > $totalpages)
-				  $value = $totalpages;
-				if(!in_array($value,$upper_arr))
-				  $upper_arr[] = $value;
+				  $value = $totalpages;  
+				   
+				$upper_arr[] = $value;
 			}
             //// add lower array values
             for ($i = 0; $i <= count($lower_arr) - 1; $i++)
