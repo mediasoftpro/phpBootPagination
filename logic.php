@@ -46,7 +46,7 @@ class pagination {
 	 // Advance pagination logic
     function advance_pagination_links($totalpages, $selectedpage)
     {
-        $i = 0;
+       $i = 0;
         $value = 0;
         $arr = array();
         $lower_arr = array();
@@ -109,6 +109,7 @@ class pagination {
                 $arr[] = $upper_arr[$i];
             }
         }
+		
         return $arr;
     }
 }
