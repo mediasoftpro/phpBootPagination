@@ -63,6 +63,7 @@ class bootPagination
 				  $this->paginationUrl = "#";
 				
 				$pid = ($this->pagenumber - 1);
+				if($pid < 1)  $pid = 1;
 				$paginationlst .= "<li><a id=\"pp_" . $pid . "\" href=\"" . $this->prepareUrl($pid) . "\" data-toggle=\"tooltip\" class=\"pagination-css\" title=\"" . $tooltip . "\"><i class=\"glyphicon glyphicon-chevron-left\"></i></a></li>\n";
 				// Normal Links
 				$paginationlst .= $this->generate_pagination_links($totalpages, $this->totalrecords, $this->pagenumber, $this->pagesize);
@@ -123,6 +124,7 @@ class bootPagination
         $tooltip = "showing " . $firstbound . " - " . $lastbound . " records of " . $totalrecords . " records";
         // Next Link
 		$pid = ($pagenumber + 1);
+		if($pid > $totalpages) $pid = $totalpages;
         $script .= "<li><a id=\"pn_" . $pid . "\" href=\"" . $this->prepareUrl($pid) . "\" class=\"pagination-css\" data-toggle=\"tooltip\" title=\"" . $tooltip . "\"><i class=\"glyphicon glyphglyphicon glyphicon-chevron-right\"></i></a></li>\n";
         if ($showlast)
         {
