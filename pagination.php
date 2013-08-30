@@ -10,6 +10,10 @@ class bootPagination
     public $showlast;
 	public $paginationcss;
 	public $paginationstyle;
+	
+	public $defaultUrl;
+	public $paginationUrl;
+	
 	function __construct()
 	{
 		$this->pagenumber = 1;
@@ -19,6 +23,9 @@ class bootPagination
 		$this->showlast = true;
 		$this->paginationcss = "pagination-small";
 		$this->paginationstyle = 1;  // 1: advance, 0: normal
+		
+		$this->defaultUrl = "#"; // in case of ajax pagination
+		$this->paginationUrl = "#"; // # incase of ajax pagination e.g index.php?p=[p] --> 
 	}
 	
 	function process()
@@ -40,7 +47,9 @@ class bootPagination
 				   $lastbound = $firstbound + $this->pagesize - 1;
 				   $tooltip = "showing " . $firstbound . " - " . $lastbound . " records of " . $this->totalrecords . " records";
 				   // First Link
-				   $paginationlst .= "<li><a id=\"p_1\" href=\"#\" class=\"pagination-css\" data-toggle=\"tooltip\" title=\"" . $tooltip . "\"><i class=\"glyphicon glyphicon-backward\"></i></a></li>\n";
+				   if($this->defaultUrl == "")
+				      $this->defaultUrl = "#";
+				   $paginationlst .= "<li><a id=\"p_1\" href=\"" . $this->defaultUrl . "\" class=\"pagination-css\" data-toggle=\"tooltip\" title=\"" . $tooltip . "\"><i class=\"glyphicon glyphicon-backward\"></i></a></li>\n";
 				}
 				$firstbound = (($totalpages - 1) * $this->pagesize);
 				$lastbound = $firstbound + $this->pagesize - 1;
@@ -50,7 +59,11 @@ class bootPagination
 				}
 				$tooltip = "showing " . $firstbound . " - " . $lastbound . " records of " . $this->totalrecords . " records";
 				// Previous Link Enabled
-				$paginationlst .= "<li><a id=\"pp_" . ($this->pagenumber - 1) . "\" href=\"#\" data-toggle=\"tooltip\" class=\"pagination-css\" title=\"" . $tooltip . "\"><i class=\"glyphicon glyphicon-chevron-left\"></i></a></li>\n";
+				if($this->paginationUrl == "")
+				  $this->paginationUrl = "#";
+				
+				$pid = ($this->pagenumber - 1);
+				$paginationlst .= "<li><a id=\"pp_" . $pid . "\" href=\"" . $this->prepareUrl($pid) . "\" data-toggle=\"tooltip\" class=\"pagination-css\" title=\"" . $tooltip . "\"><i class=\"glyphicon glyphicon-chevron-left\"></i></a></li>\n";
 				// Normal Links
 				$paginationlst .= $this->generate_pagination_links($totalpages, $this->totalrecords, $this->pagenumber, $this->pagesize);
 			   
@@ -93,7 +106,7 @@ class bootPagination
                 $css = "";
                 if ($item == $pagenumber)
                     $css = " class=\"active\"";
-                $script .= "<li" . $css . "><a id=\"pg_" . $item . "\" href=\"#\" class=\"pagination-css\" data-toggle=\"tooltip\" title=\"" . $tooltip . "\">" . $item . "</a></li>\n";
+                $script .= "<li" . $css . "><a id=\"pg_" . $item . "\" href=\"" . $this->prepareUrl($item) . "\" class=\"pagination-css\" data-toggle=\"tooltip\" title=\"" . $tooltip . "\">" . $item . "</a></li>\n";
 	       }
 	   }
        return $script;
@@ -109,7 +122,8 @@ class bootPagination
 
         $tooltip = "showing " . $firstbound . " - " . $lastbound . " records of " . $totalrecords . " records";
         // Next Link
-        $script .= "<li><a id=\"pn_" . ($pagenumber + 1) . "\" href=\"#\" class=\"pagination-css\" data-toggle=\"tooltip\" title=\"" . $tooltip . "\"><i class=\"glyphicon glyphglyphicon glyphicon-chevron-right\"></i></a></li>\n";
+		$pid = ($pagenumber + 1);
+        $script .= "<li><a id=\"pn_" . $pid . "\" href=\"" . $this->prepareUrl($pid) . "\" class=\"pagination-css\" data-toggle=\"tooltip\" title=\"" . $tooltip . "\"><i class=\"glyphicon glyphglyphicon glyphicon-chevron-right\"></i></a></li>\n";
         if ($showlast)
         {
             // Last Link
@@ -118,10 +132,18 @@ class bootPagination
             if ($lastbound > $totalpages)
                 $lastbound = $totalpages;
             $tooltip = "showing " . $firstbound . " - " . $lastbound . " records of " . $totalrecords . " records";
-            $script .= "<li><a id=\"pl_" . $totalpages . "\" href=\"#\" class=\"pagination-css\" data-toggle=\"tooltip\" title=\"" . $tooltip . "\"><i class=\"glyphicon glyphicon-forward\"></i></a></li>\n";
+            $script .= "<li><a id=\"pl_" . $totalpages . "\" href=\"" . $this->prepareUrl($totalpages) . "\" class=\"pagination-css\" data-toggle=\"tooltip\" title=\"" . $tooltip . "\"><i class=\"glyphicon glyphicon-forward\"></i></a></li>\n";
         }
         return $script;
 
     }
+	
+	function prepareUrl($pid)
+	{
+		if($this->paginationUrl == "")
+		  $this->paginationUrl = "#";
+				
+		return str_replace("/\[p\]/", $pid, $this->paginationUrl);
+	}
 }
 ?>
