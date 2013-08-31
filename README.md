@@ -1,4 +1,4 @@
-Bootstrap 3.0 Compatible Advance Pagination Script for PHP
+PHP Bootstrap Pagination
 =================================
 
 phpBootPagination script help you implement complex pagination links easily just by writing few lines of code. It has full compatibity with bootstrap 3.0
