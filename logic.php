@@ -46,7 +46,7 @@ class pagination {
 	 // Advance pagination logic
     function advance_pagination_links($totalpages, $selectedpage)
     {
-       $i = 0;
+        $i = 0;
         $value = 0;
         $arr = array();
         $lower_arr = array();
@@ -72,44 +72,62 @@ class pagination {
 		
         if ($selectedpage > 1)
         {   
-			for ($i = 0; $i <= 7; $i++)
-            {	
-			    if($value == 0)
-				   $value = $selectedpage - $patter[$i];			
-				else
-				   $value = $value - $patter[$i];
-				
-				if($value > 0)
-				   $lower_arr[] = $value;
-            }
-            $value = 0;
-			for ($i = 0; $i <= 7; $i++)
+		    if ($totalpages <= 16)
 			{
-				if($value == 0)
-				   $value = $selectedpage + $patter[$i];			
-				else
-				   $value = $value + $patter[$i];
-				
-				if($value > $totalpages)
-				  $value = $totalpages;  
-				   
-				$upper_arr[] = $value;
+			    for($i = 1; $i <= 16; $i++)
+				{
+				    $value = $i;
+					if($value > $totalpages)
+					   $value = $totalpages;
+					if(!in_array($value,$arr))
+					  $arr[] = $value;
+				}
 			}
-            //// add lower array values
-            for ($i = 0; $i <= count($lower_arr) - 1; $i++)
-            {
-                $rev_index = (count($lower_arr) - 1) - $i;
-                $arr[] = $lower_arr[$rev_index];
-            }
-            //// add selected record
-            $arr[] = $selectedpage;
-            //// add upper array values
-            for ($i = 0; $i <= count($upper_arr) - 1; $i++)
-            {
-                $arr[] = $upper_arr[$i];
-            }
+			else
+			{
+				for ($i = 0; $i <= 7; $i++)
+				{	
+					if($value == 0)
+					   $value = $selectedpage - $patter[$i];			
+					else
+					   $value = $value - $patter[$i];
+					
+					if($value > 0)
+					{
+					   if(!in_array($value,$lower_arr))
+					     $lower_arr[] = $value;
+					}
+					 
+				}
+				$value = 0;
+				for ($i = 0; $i <= 7; $i++)
+				{
+					if($value == 0)
+					   $value = $selectedpage + $patter[$i];			
+					else
+					   $value = $value + $patter[$i];
+					
+					if($value > $totalpages)
+					  $value = $totalpages;  
+					   
+					if(!in_array($value,$upper_arr))
+					   $upper_arr[] = $value;
+				}
+				//// add lower array values
+				for ($i = 0; $i <= count($lower_arr) - 1; $i++)
+				{
+					$rev_index = (count($lower_arr) - 1) - $i;
+					$arr[] = $lower_arr[$rev_index];
+				}
+				//// add selected record
+				$arr[] = $selectedpage;
+				//// add upper array values
+				for ($i = 0; $i <= count($upper_arr) - 1; $i++)
+				{
+					$arr[] = $upper_arr[$i];
+				}
+			}
         }
-		
         return $arr;
     }
 }
