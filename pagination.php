@@ -144,8 +144,10 @@ class bootPagination
 	{
 		if($this->paginationUrl == "")
 		  $this->paginationUrl = "#";
-				
-		return str_replace("/\[p\]/", $pid, $this->paginationUrl);
+		if($pid > 1)
+		  return preg_replace("/\[p\]/", $pid, $this->paginationUrl);
+		else
+		  return preg_replace("/\[p\]/", $pid, $this->defaultUrl);
 	}
 }
 ?>
