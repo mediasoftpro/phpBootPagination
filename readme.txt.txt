@@ -28,7 +28,7 @@ $pg->paginationcss = "pagination-large";
 $pg->paginationstyle = 1; // 1: advance, 0: normal
 $pg->defaultUrl = "index.php";
 $pg->paginationUrl = "index.php?p=[p];
-echo $apagination->process();</pre>
+echo $pg->process();</pre>
 
 For more detail and documentation visit
 
